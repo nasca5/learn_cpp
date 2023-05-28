@@ -21,11 +21,11 @@ class Date {
 
   public:
   // 생성자 정의
-  // Date(int _year, int _month, int _day) {
-  //   year = _year;
-  //   month = _month;
-  //   day = _day;
-  // }
+  Date(int _year, int _month, int _day) {
+    year = _year;
+    month = _month;
+    day = _day;
+  }
 
   // 디폴트 생성자 정의
   Date() {
@@ -33,7 +33,8 @@ class Date {
     month = 3;
     day = 15;
   }
-  // void SetDate(int _year, int _month, int _day);
+
+  void SetDate(int _year, int _month, int _day);
   void AddDay(int inc);
   void AddMonth(int inc);
   void AddYear(int inc);
@@ -41,11 +42,11 @@ class Date {
   void ShowDate();
 };
 
-// void Date::SetDate(int _year, int _month, int _day) {
-//   year = _year;
-//   month = _month;
-//   day = _day;
-// }
+void Date::SetDate(int _year, int _month, int _day) {
+  year = _year;
+  month = _month;
+  day = _day;
+}
 
 void Date::AddDay(int inc) {
   int last_days[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
@@ -83,9 +84,13 @@ void Date::ShowDate() {
 
 int main() {
   Date date;
-  // date.SetDate(2012, 10, 24);
+  Date date2(2015, 3, 22);
+  Date date3;
+  date3.SetDate(2012, 10, 24);
   // date.AddDay(359);
   date.ShowDate();
+  date2.ShowDate();
+  date3.ShowDate();
   
   return 0;
 }
