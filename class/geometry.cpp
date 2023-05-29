@@ -84,7 +84,7 @@ int main() {
   Geometry g;
 
   g.AddPoint(2, 8);
-  g.AddPoint(2, 4);
+  // g.AddPoint(2, 4);
   g.AddPoint(6, 6);
   g.AddPoint(6, 3);
 
