@@ -156,5 +156,9 @@ int main()
   std::cout << res1 << std::endl;
   std::cout << res2 << std::endl;
 
+  int a;
+
+  std::cin >> a;
+
   return 0;
 }

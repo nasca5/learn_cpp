@@ -1,5 +1,17 @@
 #include <iostream>
 
+// info of MyString class
+// instructor : from char c / from char* str / from MyString& str
+// member func
+// length() : return length of obj
+// at(idx) : return string_content[idx] of obj
+// assign(str) : alternate string_content to str
+// capacity() : return memory_capacity of obj
+// reserve(size) : assign memory_capacity of size
+// insert(idx, str) : insert str before string_content[idx] of obj
+// pritnln() : print string_content of obj with ln
+// pritn() : print string_content of obj without ln
+
 int strlen(const char *str)
 {
   int i = 0;
@@ -38,9 +50,20 @@ public:
 
   MyString &assign(const MyString &str);
 
+  int capacity() const;
+
+  void reverse(int size);
+
+  MyString &insert(int idx, const MyString &str);
+
+  MyString &insert(int idx, const char *str);
+
+  MyString &insert(int idx, const char c);
+
+  char at(int idx) const;
+
   // print string without ln
   void print() const;
-
   // printf string with ln
   void println() const;
 };
@@ -58,7 +81,7 @@ MyString::MyString(const char *str) : string_length(strlen(str)), memory_capacit
     string_content[i] = str[i];
   }
 }
-MyString::MyString(const MyString &str) : string_length(string_length), memory_capacity(memory_capacity)
+MyString::MyString(const MyString &str) : string_length(str.string_length), memory_capacity(str.string_length)
 {
   string_content = new char[string_length];
   for (int i = 0; i < string_length; i++)
@@ -109,6 +132,87 @@ MyString &MyString::assign(const MyString &str)
   string_length = str.length();
   return *this;
 }
+
+int MyString::capacity() const
+{
+  return memory_capacity;
+}
+
+void MyString::reverse(int size)
+{
+  if (size > memory_capacity)
+  {
+    char *ptr = string_content;
+    string_content = new char[size];
+    memory_capacity = size;
+    for (int i = 0; i < string_length; i++)
+    {
+      string_content[i] = ptr[i];
+    }
+    delete[] ptr;
+  }
+}
+
+MyString &MyString::insert(int idx, const MyString &str)
+{
+  int i;
+  if (idx >= string_length || idx < 0)
+  {
+    return *this;
+  }
+  if (string_length + str.string_length > memory_capacity)
+  {
+    memory_capacity = string_length + str.string_length;
+    char *ptr = string_content;
+    string_content = new char[memory_capacity];
+
+    for (i = 0; i < string_length; i++)
+    {
+      string_content[i] = ptr[i];
+    }
+    delete[] ptr;
+  }
+
+  for (i = string_length - 1; i >= idx; i--)
+  {
+    string_content[i + str.string_length] = string_content[i];
+  }
+
+  for (i += 1; i < idx + str.string_length; i++)
+  {
+    string_content[i] = str.string_content[i - idx];
+  }
+  string_length += str.string_length;
+
+  return *this;
+}
+
+MyString &MyString::insert(int idx, const char *str)
+{
+  MyString temp = str;
+
+  return insert(idx, temp);
+}
+
+MyString &MyString::insert(int idx, const char c)
+{
+  MyString temp = c;
+
+  return insert(idx, temp);
+}
+
+char MyString::at(int idx) const
+{
+  if (idx >= string_length || idx < 0)
+  {
+    return '\0';
+  }
+  else
+  {
+    return string_content[idx];
+  }
+}
+
 void MyString::print() const
 {
   for (int i = 0; i < string_length; i++)
@@ -129,8 +233,33 @@ int main()
 {
   MyString str1("Hello world!");
   MyString str2(str1);
+  MyString str3("sibal...");
 
-  str2.println();
-  str1.print();
+  str2.assign(str3);
+
+  str1.reverse(30);
+
+  std::cout << str1.capacity() << std::endl;
+  std::cout << str1.length() << std::endl;
+  std::cout << str1.at(1) << std::endl;
+  std::cout << str2.capacity() << std::endl;
+  std::cout << str2.length() << std::endl;
+  std::cout << str2.at(1) << std::endl; // str2.insert(2, str1); MyString str4("abc"); str4.insert(1, 'b');
+
+  MyString str4(str3);
+  str1.insert(2, str4);
+
+  str1.println();
+  str4.println();
+  // 30, 12, e, 12, 8, i
+  // Hesibal...llo world!
+  // sibal...
+  std::cout << str4.capacity() << std::endl;
+  std::cout << str4.length() << std::endl;
+  // 8, 8
+  std::cout << str1.capacity() << std::endl;
+  std::cout << str1.length() << std::endl;
+  // 30, 20
+
   return 0;
 }
