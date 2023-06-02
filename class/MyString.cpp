@@ -52,13 +52,23 @@ public:
 
   int capacity() const;
 
-  void reverse(int size);
+  void reserve(int size);
 
   MyString &insert(int idx, const MyString &str);
 
   MyString &insert(int idx, const char *str);
 
   MyString &insert(int idx, const char c);
+
+  MyString &erase(int idx, int num);
+
+  int find(int idx, const MyString &str) const;
+
+  int find(int idx, const char *str) const;
+
+  int find(int idx, const char c) const;
+
+  int compare(const MyString &str) const;
 
   char at(int idx) const;
 
@@ -73,6 +83,7 @@ MyString::MyString(char c) : string_length(1), memory_capacity(1)
   string_content = new char[1];
   string_content[0] = c;
 }
+
 MyString::MyString(const char *str) : string_length(strlen(str)), memory_capacity(strlen(str))
 {
   string_content = new char[string_length];
@@ -81,6 +92,7 @@ MyString::MyString(const char *str) : string_length(strlen(str)), memory_capacit
     string_content[i] = str[i];
   }
 }
+
 MyString::MyString(const MyString &str) : string_length(str.string_length), memory_capacity(str.string_length)
 {
   string_content = new char[string_length];
@@ -89,6 +101,7 @@ MyString::MyString(const MyString &str) : string_length(str.string_length), memo
     string_content[i] = str.string_content[i];
   }
 }
+
 MyString::~MyString()
 {
   if (string_content)
@@ -138,7 +151,7 @@ int MyString::capacity() const
   return memory_capacity;
 }
 
-void MyString::reverse(int size)
+void MyString::reserve(int size)
 {
   if (size > memory_capacity)
   {
@@ -162,7 +175,14 @@ MyString &MyString::insert(int idx, const MyString &str)
   }
   if (string_length + str.string_length > memory_capacity)
   {
-    memory_capacity = string_length + str.string_length;
+    if (memory_capacity * 2 > string_length + str.string_length)
+    {
+      memory_capacity *= 2;
+    }
+    else
+    {
+      memory_capacity = string_length + str.string_length;
+    }
     char *ptr = string_content;
     string_content = new char[memory_capacity];
 
@@ -213,6 +233,102 @@ char MyString::at(int idx) const
   }
 }
 
+MyString &MyString::erase(int idx, int num)
+{
+  if (num <= 0 || idx < 0 || idx > string_length || idx + num >= memory_capacity)
+  {
+    return *this;
+  }
+
+  else if (num > string_length - idx)
+  {
+    string_length = idx;
+    return *this;
+  }
+  for (int i = idx + num; i < string_length; i++)
+  {
+    string_content[i - num] = string_content[i];
+  }
+  string_length -= num;
+  return *this;
+}
+
+int MyString::find(int idx, const MyString &str) const
+{
+  int i, j;
+  if (str.string_length == 0)
+  {
+    return -1;
+  }
+  for (i = idx; i <= string_length - str.string_length; i++)
+  {
+    for (j = 0; j < str.string_length; j++)
+    {
+      if (string_content[i + j] != str.string_content[j])
+      {
+        break;
+      }
+    }
+
+    if (j == str.string_length)
+    {
+      return i;
+    }
+  }
+
+  return -1;
+}
+
+int MyString::find(int idx, const char *str) const
+{
+  MyString temp(str);
+
+  return find(idx, temp);
+}
+
+int MyString::find(int idx, const char c) const
+{
+  MyString temp(c);
+
+  return find(idx, temp);
+}
+
+int MyString::compare(const MyString &str) const
+{
+  int min = std::min(string_length, str.string_length);
+  int i;
+
+  if (str.length() == 0)
+  {
+    return 1;
+  }
+
+  for (i = 0; i < min; i++)
+  {
+    if (string_content[i] > str.string_content[i])
+    {
+      return 1;
+    }
+
+    else if (string_content[i] < str.string_content[i])
+    {
+      return -1;
+    }
+  }
+
+  if (string_length == str.string_length)
+  {
+    return 0;
+  }
+
+  else if (string_length > str.string_length)
+  {
+    return 1;
+  }
+
+  return -1;
+}
+
 void MyString::print() const
 {
   for (int i = 0; i < string_length; i++)
@@ -231,34 +347,58 @@ void MyString::println() const
 
 int main()
 {
-  MyString str1("Hello world!");
-  MyString str2(str1);
-  MyString str3("sibal...");
+  MyString str1("this is a very very long string");
+  std::cout << "Location of first <very> in the string : " << str1.find(0, "very") << std::endl;
+  std::cout << "Location of second <very> in the string : " << str1.find(str1.find(0, "very") + 1, "very") << std::endl;
+  std::cout << "Location of e in the string : " << str1.find(0, 'e') << std::endl;
 
-  str2.assign(str3);
+  // MyString str1("very long string");
+  // MyString str2("<some string inserted between>");
+  // str1.reserve(30);
+  // std::cout << "Capacity : " << str1.capacity() << std::endl;
+  // std::cout << "String length : " << str1.length() << std::endl;
+  // str1.println();
+  // str1.insert(5, str2);
+  // str1.println();
+  // std::cout << "Capacity : " << str1.capacity() << std::endl;
+  // std::cout << "String length : " << str1.length() << std::endl;
+  // str1.println();
 
-  str1.reverse(30);
+  // MyString str3("abcd");
+  // str3.erase(1, 2);
+  // str3.println();
 
-  std::cout << str1.capacity() << std::endl;
-  std::cout << str1.length() << std::endl;
-  std::cout << str1.at(1) << std::endl;
-  std::cout << str2.capacity() << std::endl;
-  std::cout << str2.length() << std::endl;
-  std::cout << str2.at(1) << std::endl; // str2.insert(2, str1); MyString str4("abc"); str4.insert(1, 'b');
+  // MyString str1("Hello world!");
+  // MyString str2(str1);
+  // MyString str3("sibal...");
 
-  MyString str4(str3);
-  str1.insert(2, str4);
+  // str2.assign(str3);
 
-  str1.println();
-  str4.println();
+  // str1.reserve(30);
+
+  // std::cout << str1.capacity() << std::endl;
+  // std::cout << str1.length() << std::endl;
+  // std::cout << str1.at(1) << std::endl;
+  // std::cout << str2.capacity() << std::endl;
+  // std::cout << str2.length() << std::endl;
+  // std::cout << str2.at(1) << std::endl; // str2.insert(2, str1); MyString str4("abc"); str4.insert(1, 'b');
+
+  // MyString str4(str3);
+  // str1.insert(2, str4);
+
+  // MyString str5(str1.at(1));
+  // str3.insert(3, str5);
+  // str1.println();
+  // str4.println();
+  // str3.println();
   // 30, 12, e, 12, 8, i
   // Hesibal...llo world!
   // sibal...
-  std::cout << str4.capacity() << std::endl;
-  std::cout << str4.length() << std::endl;
+  // std::cout << str4.capacity() << std::endl;
+  // std::cout << str4.length() << std::endl;
   // 8, 8
-  std::cout << str1.capacity() << std::endl;
-  std::cout << str1.length() << std::endl;
+  // std::cout << str1.capacity() << std::endl;
+  // std::cout << str1.length() << std::endl;
   // 30, 20
 
   return 0;
