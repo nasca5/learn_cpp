@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 
 int strlen(const char *str)
 {
@@ -62,9 +63,11 @@ Complex::Complex(const char *str)
   img = 0.0;
 
   int pos_i = -1;
+  int i = begin, j = begin;
 
-  for (int i = 0; i < end; i++)
+  bool minus = false;
 
+  for (; i <= end; i++)
   {
     if (str[i] == 'i')
     {
@@ -73,22 +76,60 @@ Complex::Complex(const char *str)
     }
   }
 
+  char *str_real = new char[pos_i - begin];
+  char *str_img = new char[end - pos_i];
+
+  for (; j < pos_i; j++)
+  {
+    str_real[j - begin] = str[j];
+  }
+
   if (pos_i == -1)
   {
-    real = get_number(str, begin, end - 1);
+    real = atof(str_real);
     return;
   }
 
   else
   {
-    real = get_number(str, begin, pos_i - 1);
-    img = get_number(str, pos_i + 1, end - 1);
+    for (j += 1; j < end; j++)
+    {
+      str_img[j - pos_i - 1] = str[j];
+    }
+
+    real = atof(str_real);
+    img = atof(str_img);
   }
 
   if (pos_i >= 1 && str[pos_i - 1] == '-')
   {
+    minus = true;
+  }
+
+  if (minus)
+  {
     img *= -1.0;
   }
+
+  delete[] str_real;
+  delete[] str_img;
+
+  // if (pos_i == -1)
+  // {
+  //   real = get_number(str, begin, end - 1);
+  //   return;
+  // }
+
+  // else
+  // {
+  //   real = get_number(str, begin, pos_i - 1);
+  //   img = get_number(str, pos_i + 1, end - 1);
+  // }
+
+  // if (pos_i >= 1 && str[pos_i - 1] == '-')
+  // {
+  //   img *= -1.0;
+  // }
 }
 
 Complex Complex::operator+(const Complex &c) const
