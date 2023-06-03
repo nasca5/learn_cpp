@@ -251,16 +251,25 @@ void Complex::print()
 
 int main()
 {
-  Complex a(0.0, 0.0);
-  Complex b(3.0, -2.0);
+  Complex a(0, 0);
+  a = a + "-1.1 + i3.923";
+  a.print();
+  a = a - "1.2 -i1.823";
+  a.print();
+  a = a * "2.3+i22";
+  a.print();
+  a = a / "-12+i55";
+  a.print();
+  // Complex a(0.0, 0.0);
+  // Complex b(3.0, -2.0);
   // Complex c(0.0, 0.0);
 
   // a += b;
   // c = a * b + a / b + a + b;
 
-  a = a + "-1.1 + i3.923";
-  a.print();
-  b.print();
+  // a = a + "-1.1 + i3.923";
+  // a.print();
+  // b.print();
 
   return 0;
 }
