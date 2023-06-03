@@ -30,6 +30,9 @@ private:
   int memory_capacity;  // size of string_content
 
 public:
+  // assign capacity
+  explicit MyString(int capacity);
+
   // generate only a word
   MyString(char c);
 
@@ -70,6 +73,8 @@ public:
 
   int compare(const MyString &str) const;
 
+  bool operator==(MyString &str);
+
   char at(int idx) const;
 
   // print string without ln
@@ -77,6 +82,14 @@ public:
   // printf string with ln
   void println() const;
 };
+
+MyString::MyString(int capacity)
+{
+  memory_capacity = capacity;
+  string_content = new char[memory_capacity];
+  string_length = 0;
+  std::cout << "Capacity : " << memory_capacity << std::endl;
+}
 
 MyString::MyString(char c) : string_length(1), memory_capacity(1)
 {
@@ -329,6 +342,11 @@ int MyString::compare(const MyString &str) const
   return -1;
 }
 
+bool MyString::operator==(MyString &str)
+{
+  return !compare(str);
+}
+
 void MyString::print() const
 {
   for (int i = 0; i < string_length; i++)
@@ -347,10 +365,32 @@ void MyString::println() const
 
 int main()
 {
-  MyString str1("this is a very very long string");
-  std::cout << "Location of first <very> in the string : " << str1.find(0, "very") << std::endl;
-  std::cout << "Location of second <very> in the string : " << str1.find(str1.find(0, "very") + 1, "very") << std::endl;
-  std::cout << "Location of e in the string : " << str1.find(0, 'e') << std::endl;
+  MyString str1 = "a word";
+  MyString str2 = "sentence";
+  MyString str3(str2);
+
+  if (str1 == str2)
+  {
+    std::cout << "str1, str2 are same" << std::endl;
+  }
+  else
+  {
+    std::cout << "str1, str2 are different" << std::endl;
+  }
+
+  if (str2 == str3)
+  {
+    std::cout << "str2, str3 are same" << std::endl;
+  }
+  else
+  {
+    std::cout << "str2, str3 are different" << std::endl;
+  }
+  // MyString(3);
+  // MyString str1("this is a very very long string");
+  // std::cout << "Location of first <very> in the string : " << str1.find(0, "very") << std::endl;
+  // std::cout << "Location of second <very> in the string : " << str1.find(str1.find(0, "very") + 1, "very") << std::endl;
+  // std::cout << "Location of e in the string : " << str1.find(0, 'e') << std::endl;
 
   // MyString str1("very long string");
   // MyString str2("<some string inserted between>");
