@@ -69,7 +69,7 @@ public:
   bool operator==(MyString &str);
   MyString operator+(const MyString &str) const;
   // MyString &operator=(const MyString &str);
-  char operator[](int idx) const;
+  char operator[](const int idx) const;
 
   char at(int idx) const;
 
@@ -376,7 +376,7 @@ MyString MyString::operator+(const MyString &str) const
 //   return (*this);
 // }
 
-char MyString::operator[](int idx) const
+char MyString::operator[](const int idx) const
 {
   return string_content[idx];
 }
