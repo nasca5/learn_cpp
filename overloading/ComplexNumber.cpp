@@ -307,7 +307,7 @@ int main()
 {
   Complex a(0, 0);
   // a = "-1.1 + i3.923" + a;
-  a = a + "-1.1 + i3.932";
+  a = "-1.1 + i3.932";
   Complex b(a);
   a = a + b + "-2.5 + i3.354";
   std::cout << "a's value is " << a << "!" << std::endl;

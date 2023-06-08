@@ -68,7 +68,7 @@ public:
 
   bool operator==(MyString &str);
   MyString operator+(const MyString &str) const;
-  // MyString &operator=(const MyString &str);
+  MyString &operator=(const MyString &str);
   char operator[](const int idx) const;
 
   char at(int idx) const;
@@ -370,11 +370,11 @@ MyString MyString::operator+(const MyString &str) const
   return temp;
 }
 
-// MyString &MyString::operator=(const MyString &str)
-// {
-//   (*this).assign(str);
-//   return (*this);
-// }
+MyString &MyString::operator=(const MyString &str)
+{
+  (*this).assign(str);
+  return (*this);
+}
 
 char MyString::operator[](const int idx) const
 {
